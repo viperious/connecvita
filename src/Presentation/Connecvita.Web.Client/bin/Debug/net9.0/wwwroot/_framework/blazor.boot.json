@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Connecvita.Web.Client",
   "resources": {
-    "hash": "sha256-ZFKqXw4PHxT6eaYxDUJsyn1kQHXlzpUFxTVWMrSMAH0=",
+    "hash": "sha256-t01NXq24dkCzJkvQg1hLlt27h0AFinnFtgsJxJylVII=",
     "fingerprinting": {
       "Microsoft.AspNetCore.Authorization.emi29mth4g.wasm": "Microsoft.AspNetCore.Authorization.wasm",
       "Microsoft.AspNetCore.Components.q2vtl6xnmi.wasm": "Microsoft.AspNetCore.Components.wasm",
@@ -203,8 +203,8 @@
       "icudt_CJK.tjcz0u77k5.dat": "icudt_CJK.dat",
       "icudt_EFIGS.tptq2av103.dat": "icudt_EFIGS.dat",
       "icudt_no_CJK.lfu7j35m59.dat": "icudt_no_CJK.dat",
-      "Connecvita.Web.Client.q6c51djyf8.wasm": "Connecvita.Web.Client.wasm",
-      "Connecvita.Web.Client.e03yo46hxn.pdb": "Connecvita.Web.Client.pdb"
+      "Connecvita.Web.Client.kpffzqcz26.wasm": "Connecvita.Web.Client.wasm",
+      "Connecvita.Web.Client.yya76h7m7u.pdb": "Connecvita.Web.Client.pdb"
     },
     "jsModuleNative": {
       "dotnet.native.l1ds2rhypd.js": "sha256-CU8oL4L0VAwGe3hCyxZDy7keJq9dcsWED0JKqrvlUb4="
@@ -416,10 +416,10 @@
       "WindowsBase.p8fley4coh.wasm": "sha256-aRYzLqbGeHVYVMueB/ppfGVKTJ8jPRnWCHEGfFXiSG4=",
       "mscorlib.gr56bjb982.wasm": "sha256-rGm+fePHcRdNKLvNvl2ALv504HZc6ufZZqaXcOLo8HQ=",
       "netstandard.3vbiim3d7s.wasm": "sha256-j+YhS0xT+ZUStadRqdIFX5q3MfD09IJhCcEkJ3y3Kh0=",
-      "Connecvita.Web.Client.q6c51djyf8.wasm": "sha256-8nFJAEplbNQMvguVFaQqjWcdKawjYVXeXB9R3sY7J2o="
+      "Connecvita.Web.Client.kpffzqcz26.wasm": "sha256-uNfN1oDuvP+ysRxQt0O2sfTHeAoGtpynjc9Gw2MTyhc="
     },
     "pdb": {
-      "Connecvita.Web.Client.e03yo46hxn.pdb": "sha256-vovDREX7W1pzN/ZGXmF07q9eGBNkDbErkt83fvQDnYw="
+      "Connecvita.Web.Client.yya76h7m7u.pdb": "sha256-Ss3VJmUN+a1siA73U9Tt1k8Bp1gwa2v1jNWdyxxi8pc="
     }
   },
   "cacheBootResources": true,
