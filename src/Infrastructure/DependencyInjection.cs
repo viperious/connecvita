@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Connecvita.Infrastructure.Wearables.Oura;
+using Connecvita.Infrastructure.Wearables.Sync;
+using Connecvita.Infrastructure.Wearables.Abstractions;
 
 namespace Connecvita.Infrastructure;
 
@@ -26,7 +29,7 @@ public static class DependencyInjection
         services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         {
             options.SignIn.RequireConfirmedAccount = true;
-        })        
+        })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
@@ -58,6 +61,10 @@ public static class DependencyInjection
             )*/;
 
         services.AddScoped<IProfileService, ProfileService>();
+
+        services.AddHttpClient<OuraClient>();
+        services.AddScoped<IWearableClient, OuraClient>();
+        services.AddScoped<OuraAuthService>();
         return services;
     }
 }

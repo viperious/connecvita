@@ -188,6 +188,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Connecvita/src/Presentation/Connecvita.Web/Components/Pages/Health/OuraCallBack.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIZWFsdGhcT3VyYUNhbGxCYWNrLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Connecvita/src/Presentation/Connecvita.Web/Components/Pages/Health/WearableConnect.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIZWFsdGhcV2VhcmFibGVDb25uZWN0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Connecvita/src/Presentation/Connecvita.Web/Components/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 

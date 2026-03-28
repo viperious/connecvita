@@ -13,3 +13,4 @@ C:\Connecvita\src\Application\obj\Debug\net9.0\Connecvita.Application.dll
 C:\Connecvita\src\Application\obj\Debug\net9.0\refint\Connecvita.Application.dll
 C:\Connecvita\src\Application\obj\Debug\net9.0\Connecvita.Application.pdb
 C:\Connecvita\src\Application\obj\Debug\net9.0\ref\Connecvita.Application.dll
+C:\Connecvita\src\Application\obj\Debug\net9.0\Connecvita.Application.sourcelink.json

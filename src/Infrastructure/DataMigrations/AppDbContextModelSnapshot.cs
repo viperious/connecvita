@@ -112,11 +112,26 @@ namespace Connecvita.Infrastructure.DataMigrations
                     b.Property<DateTime>("RecordedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("RecoveryHigh")
+                        .HasColumnType("int");
+
                     b.Property<string>("SessionData")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SleepEfficiency")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SleepScore")
                         .HasColumnType("int");
+
+                    b.Property<double?>("SpO2")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("StressHigh")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StressSummary")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SyncedAt")
                         .HasColumnType("datetime2");
@@ -127,6 +142,9 @@ namespace Connecvita.Infrastructure.DataMigrations
 
                     b.Property<double?>("Temperature")
                         .HasColumnType("float");
+
+                    b.Property<int?>("TotalSleepMinutes")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("UserProfileId")
                         .HasColumnType("uniqueidentifier");
@@ -140,6 +158,46 @@ namespace Connecvita.Infrastructure.DataMigrations
                     b.HasIndex("UserProfileId", "RecordedAt");
 
                     b.ToTable("WearableMetrics");
+                });
+
+            modelBuilder.Entity("Connecvita.Domain.Entities.WearableToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AccessToken")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Platform")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RefreshToken")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "Platform")
+                        .IsUnique();
+
+                    b.ToTable("WearableTokens");
                 });
 
             modelBuilder.Entity("Connecvita.Infrastructure.Data.ApplicationUser", b =>

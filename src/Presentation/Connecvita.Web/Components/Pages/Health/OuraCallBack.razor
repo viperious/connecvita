@@ -1,0 +1,105 @@
+@page "/wearables/oura/callback"
+@rendermode InteractiveServer
+@attribute [Authorize]
+@inject AuthenticationStateProvider AuthStateProvider
+@inject OuraAuthService OuraAuthService
+@inject NavigationManager Navigation
+
+<PageTitle>Connecting Oura Ring - Connecvita</PageTitle>
+
+<div class="page-container">
+    @if (IsProcessing)
+    {
+        <div class="loading-state">
+            <div class="spinner"></div>
+            <h2>Connecting your Oura Ring...</h2>
+            <p>Fetching your health data. This may take a moment.</p>
+        </div>
+    }
+    else if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <div class="empty-state">
+            <h2>Connection Failed</h2>
+            <p>@ErrorMessage</p>
+            <button class="btn btn-primary"
+                    @onclick='() => Navigation.NavigateTo("/wearables/connect")'>
+                Try Again
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <h2>✅ Oura Ring Connected!</h2>
+            <p>Your health data has been synced successfully.</p>
+            <button class="btn btn-primary"
+                    @onclick='() => Navigation.NavigateTo("/profile")'>
+                View My Profile
+            </button>
+        </div>
+    }
+</div>
+
+@code {
+    [SupplyParameterFromQuery] public string? Code { get; set; }
+    [SupplyParameterFromQuery] public string? State { get; set; }
+    [SupplyParameterFromQuery] public string? Error { get; set; }
+
+    private bool IsProcessing { get; set; } = true;
+    private string? ErrorMessage { get; set; }
+    private bool _hasProcessed = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || _hasProcessed) return;
+        _hasProcessed = true;
+
+        if (!string.IsNullOrEmpty(Error))
+        {
+            ErrorMessage = "Oura authorization was denied or cancelled.";
+            IsProcessing = false;
+            StateHasChanged();
+            return;
+        }
+
+        if (string.IsNullOrEmpty(Code))
+        {
+            ErrorMessage = "No authorization code received from Oura.";
+            IsProcessing = false;
+            StateHasChanged();
+            return;
+        }
+
+        try
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var userId = authState.User.FindFirst(
+                System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                ErrorMessage = "Unable to identify user. Please log in again.";
+                IsProcessing = false;
+                StateHasChanged();
+                return;
+            }
+
+            await OuraAuthService.HandleCallbackAsync(Code, userId);
+            IsProcessing = false;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            // 400 on second attempt means first attempt already succeeded
+            if (ex.Message.Contains("400") || ex.Message.Contains("Bad Request"))
+            {
+                IsProcessing = false;
+                StateHasChanged();
+                return;
+            }
+            ErrorMessage = $"Failed to connect Oura Ring: {ex.Message}";
+            IsProcessing = false;
+            StateHasChanged();
+        }
+    }
+}

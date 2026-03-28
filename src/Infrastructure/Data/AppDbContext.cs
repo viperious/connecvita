@@ -12,6 +12,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<UserProfile> UserProfiles => Set<UserProfile>();
     public DbSet<WearableMetrics> WearableMetrics => Set<WearableMetrics>();
+    public DbSet<WearableToken> WearableTokens => Set<WearableToken>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

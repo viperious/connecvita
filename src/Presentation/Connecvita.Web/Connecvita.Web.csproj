@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Components\Pages\Health\" />
     <Folder Include="Components\Pages\Profile\" />
     <Folder Include="Components\Shared\Health\" />
   </ItemGroup>

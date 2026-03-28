@@ -10,3 +10,4 @@ C:\Connecvita\src\Domain\obj\Debug\net9.0\Connecvita.Domain.dll
 C:\Connecvita\src\Domain\obj\Debug\net9.0\refint\Connecvita.Domain.dll
 C:\Connecvita\src\Domain\obj\Debug\net9.0\Connecvita.Domain.pdb
 C:\Connecvita\src\Domain\obj\Debug\net9.0\ref\Connecvita.Domain.dll
+C:\Connecvita\src\Domain\obj\Debug\net9.0\Connecvita.Domain.sourcelink.json

@@ -214,3 +214,4 @@ C:\Connecvita\src\Presentation\Connecvita.Web\obj\Debug\net9.0\Connecvita.Web.Mv
 C:\Connecvita\src\Presentation\Connecvita.Web\bin\Debug\net9.0\AspNet.Security.OAuth.Apple.dll
 C:\Connecvita\src\Presentation\Connecvita.Web\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.Facebook.dll
 C:\Connecvita\src\Presentation\Connecvita.Web\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.Google.dll
+C:\Connecvita\src\Presentation\Connecvita.Web\obj\Debug\net9.0\Connecvita.Web.sourcelink.json

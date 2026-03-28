@@ -17,3 +17,4 @@ C:\Connecvita\src\Infrastructure\obj\Debug\net9.0\refint\Connecvita.Infrastructu
 C:\Connecvita\src\Infrastructure\obj\Debug\net9.0\Connecvita.Infrastructure.pdb
 C:\Connecvita\src\Infrastructure\obj\Debug\net9.0\Connecvita.Infrastructure.genruntimeconfig.cache
 C:\Connecvita\src\Infrastructure\obj\Debug\net9.0\ref\Connecvita.Infrastructure.dll
+C:\Connecvita\src\Infrastructure\obj\Debug\net9.0\Connecvita.Infrastructure.sourcelink.json

@@ -1,0 +1,124 @@
+﻿@page "/wearables/connect"
+@rendermode InteractiveServer
+@attribute [Authorize]
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+@inject OuraAuthService OuraAuthService
+@inject IProfileService ProfileService
+
+<PageTitle>Connect Wearables - Connecvita</PageTitle>
+
+<div class="page-container">
+    <h1>Connect Your Wearables</h1>
+    <p>Connect your health devices to power your Connecvita matching.</p>
+
+    @if (IsLoading)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <div class="wearable-connect-grid">
+            <div class="wearable-connect-card @(OuraConnected ? "connected" : "")">
+                <div class="wearable-connect-header">
+                    <span class="wearable-icon">💍</span>
+                    <div>
+                        <h3>Oura Ring</h3>
+                        <p>Sleep, readiness, activity, HRV and more</p>
+                    </div>
+                </div>
+                <div class="wearable-connect-status">
+                    @if (OuraConnected)
+                    {
+                        <span class="status-badge connected">✅ Connected</span>
+                        <button class="btn btn-sm btn-outline" @onclick="ResyncOura" disabled="@IsSyncing">
+                            @(IsSyncing ? "Syncing..." : "🔄 Sync Now")
+                        </button>
+                        @if (!string.IsNullOrEmpty(SyncMessage))
+                        {
+                            <p class="sync-message">@SyncMessage</p>
+                        }
+                    }
+                    else
+                    {
+                        <button class="btn btn-primary" @onclick="ConnectOura">
+                            Connect Oura Ring
+                        </button>
+                    }
+                </div>
+            </div>
+
+            @foreach (var platform in ComingSoonPlatforms)
+            {
+                <div class="wearable-connect-card coming-soon">
+                    <div class="wearable-connect-header">
+                        <span class="wearable-icon">⌚</span>
+                        <div>
+                            <h3>@platform</h3>
+                            <p>Coming soon</p>
+                        </div>
+                    </div>
+                    <div class="wearable-connect-status">
+                        <span class="status-badge coming-soon">Coming Soon</span>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private string? UserId { get; set; }
+    private bool OuraConnected { get; set; }
+    private bool IsLoading { get; set; } = true;
+
+    private bool IsSyncing { get; set; }
+    private string? SyncMessage { get; set; }
+
+    private async Task ResyncOura()
+    {
+        if (string.IsNullOrEmpty(UserId)) return;
+        IsSyncing = true;
+        SyncMessage = null;
+
+        try
+        {
+            await OuraAuthService.ResyncAsync(UserId);
+            SyncMessage = "✅ Sync complete!";
+        }
+        catch (Exception ex)
+        {
+            SyncMessage = $"Sync failed: {ex.Message}";
+        }
+        finally
+        {
+            IsSyncing = false;
+        }
+    }
+
+    private static readonly string[] ComingSoonPlatforms =
+        ["WHOOP", "Garmin", "Apple Health", "Google Fit", "Fitbit", "Samsung Health"];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        UserId = authState.User.FindFirst(
+            System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (!string.IsNullOrEmpty(UserId))
+        {
+            var profile = await ProfileService.GetByUserIdAsync(UserId);
+            OuraConnected = profile?.ConnectedPlatforms
+                .Contains(WearablePlatform.OuraRing) ?? false;
+        }
+
+        IsLoading = false;
+    }
+
+    private void ConnectOura()
+    {
+        if (string.IsNullOrEmpty(UserId)) return;
+        var authUrl = OuraAuthService.GetAuthorizationUrl(UserId);
+        Navigation.NavigateTo(authUrl, forceLoad: true);
+    }
+}
