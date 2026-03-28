@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Connecvita.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c1b39ae72ba2231a0506e1ba8649e7852c2d13ce")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+59666fc59e281568cd979ac850b2f61ec1c79055")]
 [assembly: System.Reflection.AssemblyProductAttribute("Connecvita.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Connecvita.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
