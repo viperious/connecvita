@@ -1,0 +1,26 @@
+<div class="nav-menu">
+    <nav>
+        <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+            <span>🏠</span> Discover
+        </NavLink>
+        <NavLink class="nav-link" href="/matches">
+            <span>💚</span> Matches
+        </NavLink>
+        <NavLink class="nav-link" href="/messages">
+            <span>💬</span> Messages
+        </NavLink>
+        <NavLink class="nav-link" href="/profile">
+            <span>👤</span> Profile
+        </NavLink>
+    </nav>
+
+    <div class="nav-footer">
+    <AuthorizeView>
+        <Authorized>
+            <NavLink class="nav-link logout-btn" href="/Account/Logout">
+                <span>🚪</span> Logout
+            </NavLink>
+        </Authorized>
+    </AuthorizeView>
+</div>
+</div>

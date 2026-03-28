@@ -1,0 +1,93 @@
+@page "/"
+@page "/discover"
+@rendermode InteractiveServer
+@inject IProfileService ProfileService
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+
+<PageTitle>Discover - Connecvita</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <div class="discover-container">
+            @if (IsLoading)
+            {
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Finding your matches...</p>
+                </div>
+            }
+            else if (!IsProfileComplete)
+            {
+                <div class="empty-state">
+                    <h2>Welcome to Connecvita</h2>
+                    <p>Complete your profile to start discovering matches.</p>
+                    <button class="btn btn-primary"
+                            @onclick='() => Navigation.NavigateTo("/profile/setup")'>
+                        Set Up My Profile
+                    </button>
+                </div>
+            }
+            else if (!Profiles.Any())
+            {
+                <div class="empty-state">
+                    <h2>No more profiles</h2>
+                    <p>You've seen everyone for now. Check back soon!</p>
+                </div>
+            }
+            else
+            {
+                <div class="card-stack">
+                    @foreach (var profile in Profiles.Take(3))
+                    {
+                        <ProfileCard Profile="profile"
+                                     OnLike="HandleLike"
+                                     OnPass="HandlePass" />
+                    }
+                </div>
+            }
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="landing-container">
+            <h1>Welcome to Connecvita</h1>
+            <p>Connect with people who share your health journey.</p>
+            <div class="landing-actions">
+                <a class="btn btn-primary" href="/Account/Register">Get Started</a>
+                <a class="btn btn-secondary" href="/Account/Login">Sign In</a>
+            </div>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private List<UserProfileDto> Profiles { get; set; } = [];
+    private bool IsLoading { get; set; } = true;
+    private bool IsProfileComplete { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var userId = authState.User.FindFirst(
+            System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (!string.IsNullOrEmpty(userId))
+        {
+            IsProfileComplete = await ProfileService.IsProfileCompleteAsync(userId);
+        }
+
+        IsLoading = false;
+    }
+
+    private async Task HandleLike(Guid profileId)
+    {
+        Profiles.RemoveAll(p => p.Id == profileId);
+        await Task.CompletedTask;
+    }
+
+    private async Task HandlePass(Guid profileId)
+    {
+        Profiles.RemoveAll(p => p.Id == profileId);
+        await Task.CompletedTask;
+    }
+}

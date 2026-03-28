@@ -1,0 +1,43 @@
+﻿@page "/matches"
+@rendermode InteractiveServer
+@inject IProfileService ProfileService
+@inject AuthenticationStateProvider AuthStateProvider
+
+<PageTitle>Matches - Connecvita</PageTitle>
+
+<div class="page-container">
+    <h1>Your Matches</h1>
+
+    @if (IsLoading)
+    {
+        <p>Loading matches...</p>
+    }
+    else if (!MatchesList.Any())
+    {
+        <div class="empty-state">
+            <h2>No matches yet</h2>
+            <p>Keep exploring profiles in Discover to find your matches!</p>
+        </div>
+    }
+    else
+    {
+        <div class="matches-grid">
+            @foreach (var match in MatchesList)
+            {
+                <ProfileCard Profile="match" />
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<UserProfileDto> MatchesList { get; set; } = [];
+    private bool IsLoading { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Matching service will populate this once built
+        IsLoading = false;
+        await Task.CompletedTask;
+    }
+}

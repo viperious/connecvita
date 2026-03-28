@@ -1,0 +1,83 @@
+﻿@using Connecvita.Application.DTOs.Profile
+
+<div class="profile-card">
+    <div class="profile-card-photo">
+        @if (Profile.PhotoUrls.Any())
+        {
+            <img src="@Profile.PhotoUrls.First()" alt="@Profile.FirstName" />
+        }
+        else
+        {
+            <div class="profile-card-avatar">
+                @Profile.FirstName[0]@Profile.LastName[0]
+            </div>
+        }
+    </div>
+
+    <div class="profile-card-info">
+        <h3>@Profile.FirstName, @Age</h3>
+        @if (!string.IsNullOrEmpty(Profile.Location))
+        {
+            <p class="profile-location">📍 @Profile.Location</p>
+        }
+        @if (!string.IsNullOrEmpty(Profile.Bio))
+        {
+            <p class="profile-bio">@TruncatedBio</p>
+        }
+    </div>
+
+    @if (Profile.SleepScore.HasValue || Profile.ReadinessScore.HasValue || Profile.ActivityScore.HasValue)
+    {
+        <div class="profile-card-health">
+            @if (Profile.SleepScore.HasValue)
+            {
+                <div class="health-badge sleep">
+                    <span class="health-label">Sleep</span>
+                    <span class="health-score">@Profile.SleepScore</span>
+                </div>
+            }
+            @if (Profile.ReadinessScore.HasValue)
+            {
+                <div class="health-badge readiness">
+                    <span class="health-label">Readiness</span>
+                    <span class="health-score">@Profile.ReadinessScore</span>
+                </div>
+            }
+            @if (Profile.ActivityScore.HasValue)
+            {
+                <div class="health-badge activity">
+                    <span class="health-label">Activity</span>
+                    <span class="health-score">@Profile.ActivityScore</span>
+                </div>
+            }
+        </div>
+    }
+
+    @if (Profile.ConnectedPlatforms.Any())
+    {
+        <div class="profile-card-platforms">
+            @foreach (var platform in Profile.ConnectedPlatforms.Take(3))
+            {
+                <span class="platform-badge">@platform.ToString()</span>
+            }
+        </div>
+    }
+
+    <div class="profile-card-actions">
+        <button class="btn-pass" @onclick="() => OnPass.InvokeAsync(Profile.Id)">✕</button>
+        <button class="btn-like" @onclick="() => OnLike.InvokeAsync(Profile.Id)">♥</button>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public UserProfileDto Profile { get; set; } = default!;
+    [Parameter] public EventCallback<Guid> OnLike { get; set; }
+    [Parameter] public EventCallback<Guid> OnPass { get; set; }
+
+    private int Age => DateTime.Today.Year - Profile.DateOfBirth.Year -
+        (DateTime.Today.DayOfYear < Profile.DateOfBirth.DayOfYear ? 1 : 0);
+
+    private string TruncatedBio => Profile.Bio?.Length > 120
+        ? Profile.Bio[..120] + "..."
+        : Profile.Bio ?? string.Empty;
+}

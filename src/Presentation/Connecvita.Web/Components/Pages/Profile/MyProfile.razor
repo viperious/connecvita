@@ -1,0 +1,149 @@
+﻿@page "/profile"
+@rendermode InteractiveServer
+@attribute [Authorize]
+@inject IProfileService ProfileService
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+
+<PageTitle>My Profile - Connecvita</PageTitle>
+
+<div class="page-container">
+    @if (IsLoading)
+    {
+        <p>Loading profile...</p>
+    }
+    else if (Profile is null)
+    {
+        <div class="empty-state">
+            <h2>No profile found</h2>
+            <p>Let's get you set up!</p>
+            <button class="btn btn-primary"
+                    @onclick='() => Navigation.NavigateTo("/profile/setup")'>
+                Set Up Profile
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="profile-view">
+            <div class="profile-header">
+                <div class="profile-avatar-large">
+                    @Profile.FirstName[0]@Profile.LastName[0]
+                </div>
+                <div class="profile-header-info">
+                    <h1>@Profile.FirstName @Profile.LastName</h1>
+                    @if (!string.IsNullOrEmpty(Profile.Location))
+                    {
+                        <p class="profile-location">📍 @Profile.Location</p>
+                    }
+                    <p class="profile-age">@Age years old</p>
+                    <span class="profile-context-badge">@Profile.MatchingContext.ToString()</span>
+                </div>
+                <button class="btn btn-secondary"
+                        @onclick='() => Navigation.NavigateTo("/profile/setup")'>
+                    Edit Profile
+                </button>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Profile.Bio))
+            {
+                <div class="profile-section">
+                    <h3>About</h3>
+                    <p>@Profile.Bio</p>
+                </div>
+            }
+
+            @if (Profile.SleepScore.HasValue || Profile.ReadinessScore.HasValue || Profile.ActivityScore.HasValue)
+            {
+                <div class="profile-section">
+                    <h3>Health Scores</h3>
+                    <div class="health-scores-row">
+                        @if (Profile.SleepScore.HasValue)
+                        {
+                            <div class="health-score-item">
+                                <span class="score-label">Sleep</span>
+                                <span class="score-value">@Profile.SleepScore</span>
+                            </div>
+                        }
+                        @if (Profile.ReadinessScore.HasValue)
+                        {
+                            <div class="health-score-item">
+                                <span class="score-label">Readiness</span>
+                                <span class="score-value">@Profile.ReadinessScore</span>
+                            </div>
+                        }
+                        @if (Profile.ActivityScore.HasValue)
+                        {
+                            <div class="health-score-item">
+                                <span class="score-label">Activity</span>
+                                <span class="score-value">@Profile.ActivityScore</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Profile.ConnectedPlatforms.Any())
+            {
+                <div class="profile-section">
+                    <h3>Connected Wearables</h3>
+                    <div class="platform-list">
+                        @foreach (var platform in Profile.ConnectedPlatforms)
+                        {
+                            <span class="platform-badge">@FormatPlatformName(platform)</span>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="profile-section">
+                    <h3>Connected Wearables</h3>
+                    <p class="text-muted">No wearables connected yet.</p>
+                    <button class="btn btn-secondary btn-sm"
+                            @onclick='() => Navigation.NavigateTo("/profile/setup")'>
+                        Connect a Device
+                    </button>
+                </div>
+            }
+
+            <div class="profile-section">
+                <p class="text-muted small">
+                    Profile complete: @(Profile.IsComplete ? "✅ Yes" : "⚠️ Incomplete")
+                </p>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private UserProfileDto? Profile { get; set; }
+    private bool IsLoading { get; set; } = true;
+
+    private int Age => Profile is null ? 0 :
+        DateTime.Today.Year - Profile.DateOfBirth.Year -
+        (DateTime.Today.DayOfYear < Profile.DateOfBirth.DayOfYear ? 1 : 0);
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var userId = authState.User.FindFirst(
+            System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (!string.IsNullOrEmpty(userId))
+        {
+            Profile = await ProfileService.GetByUserIdAsync(userId);
+        }
+
+        IsLoading = false;
+    }
+
+    private static string FormatPlatformName(WearablePlatform platform) => platform switch
+    {
+        WearablePlatform.OuraRing => "Oura Ring",
+        WearablePlatform.AppleHealth => "Apple Health",
+        WearablePlatform.GoogleFit => "Google Fit",
+        WearablePlatform.SamsungHealth => "Samsung Health",
+        _ => platform.ToString()
+    };
+}

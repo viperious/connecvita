@@ -1,0 +1,15 @@
+C:\Connecvita\src\Application\bin\Debug\net9.0\Connecvita.Application.deps.json
+C:\Connecvita\src\Application\bin\Debug\net9.0\Connecvita.Application.dll
+C:\Connecvita\src\Application\bin\Debug\net9.0\Connecvita.Application.pdb
+C:\Connecvita\src\Application\bin\Debug\net9.0\Connecvita.Domain.dll
+C:\Connecvita\src\Application\bin\Debug\net9.0\Connecvita.Domain.pdb
+C:\Connecvita\src\Application\obj\Debug\net9.0\Connecvita.Application.csproj.AssemblyReference.cache
+C:\Connecvita\src\Application\obj\Debug\net9.0\Connecvita.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Connecvita\src\Application\obj\Debug\net9.0\Connecvita.Application.AssemblyInfoInputs.cache
+C:\Connecvita\src\Application\obj\Debug\net9.0\Connecvita.Application.AssemblyInfo.cs
+C:\Connecvita\src\Application\obj\Debug\net9.0\Connecvita.Application.csproj.CoreCompileInputs.cache
+C:\Connecvita\src\Application\obj\Debug\net9.0\Connecvi.3CCDCB5B.Up2Date
+C:\Connecvita\src\Application\obj\Debug\net9.0\Connecvita.Application.dll
+C:\Connecvita\src\Application\obj\Debug\net9.0\refint\Connecvita.Application.dll
+C:\Connecvita\src\Application\obj\Debug\net9.0\Connecvita.Application.pdb
+C:\Connecvita\src\Application\obj\Debug\net9.0\ref\Connecvita.Application.dll

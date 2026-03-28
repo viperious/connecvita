@@ -1,0 +1,388 @@
+@page "/profile/setup"
+@rendermode InteractiveServer
+@attribute [Authorize]
+@inject IProfileService ProfileService
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+
+<PageTitle>Complete Your Profile - Connecvita</PageTitle>
+
+<div class="setup-container">
+    <div class="setup-progress">
+        <div class="progress-bar" style="width: @($"{(CurrentStep / (double)TotalSteps) * 100}%")"></div>
+    </div>
+
+    <div class="setup-header">
+        <h1>Set Up Your Profile</h1>
+        <p>Step @CurrentStep of @TotalSteps</p>
+    </div>
+
+    @if (CurrentStep == 1)
+    {
+        <div class="setup-step">
+            <h2>Basic Information</h2>
+            <div class="form-group">
+                <label>First Name</label>
+                <input class="form-control" @bind="FirstName" placeholder="Enter your first name" />
+            </div>
+            <div class="form-group">
+                <label>Last Name</label>
+                <input class="form-control" @bind="LastName" placeholder="Enter your last name" />
+            </div>
+            <div class="form-group">
+                <label>Date of Birth</label>
+                <input class="form-control" type="date" value="@DobString" @onchange="HandleDobChange" max="@MaxDobDate"
+                       min="@MinDobDate" />
+                @if (DobError != null)
+                {
+                    <small class="text-danger">@DobError</small>
+                }
+                <small>Must be 21 or older to join Connecvita.</small>
+            </div>
+            <div class="form-group">
+                <label>City</label>
+                <input class="form-control" @bind="City" placeholder="Enter your city" />
+            </div>
+            <div class="form-group">
+                <label>State</label>
+                <select class="form-control" @bind="State">
+                    <option value="">Select a state</option>
+                    @foreach (var state in UsStates)
+                    {
+                        <option value="@state">@state</option>
+                    }
+                </select>
+            </div>
+        </div>
+    }
+    else if (CurrentStep == 2)
+    {
+        <div class="setup-step">
+            <h2>About You</h2>
+            <div class="form-group">
+                <label>Bio</label>
+                <textarea class="form-control" @bind="Bio" @bind:event="oninput" rows="4"
+                          placeholder="Tell others about yourself..." maxlength="2000"></textarea>
+                <small>@(Bio?.Length ?? 0) / 2000</small>
+            </div>
+            <div class="form-group">
+                <label>I'm looking for</label>
+                <div class="context-options">
+                    @foreach (var context in Enum.GetValues<MatchingContext>())
+                    {
+                        <div class="radio-option">
+                            <input type="radio" id="context_@context" name="matchingContext" value="@context"
+                                   checked="@(MatchingContext == context)" @onchange="@(() => SelectContext(context))" />
+                            <label for="context_@context">@context.ToString()</label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    else if (CurrentStep == 3)
+    {
+        <div class="setup-step">
+            <h2>Physical Attributes</h2>
+            <div class="form-group">
+                <label>Height</label>
+                <div class="measurement-inputs">
+                    <input class="form-control" type="number" @bind="HeightFeet" min="1" max="8" placeholder="ft" />
+                    <span>ft</span>
+                    <input class="form-control" type="number" @bind="HeightInches" min="0" max="11" placeholder="in" />
+                    <span>in</span>
+                </div>
+                @if (HeightCm.HasValue)
+                {
+                    <small>@HeightCm.Value.ToString("F1") cm</small>
+                }
+            </div>
+            <div class="form-group">
+                <label>Weight</label>
+                <div class="measurement-inputs">
+                    <input class="form-control" type="number" @bind="WeightLbs" min="50" max="700" placeholder="lbs" />
+                    <span>lbs</span>
+                </div>
+                @if (WeightKg.HasValue)
+                {
+                    <small>@WeightKg.Value.ToString("F1") kg</small>
+                }
+            </div>
+            <div class="form-group">
+                <label>Blood Type</label>
+                <select class="form-control" @bind="SelectedBloodType">
+                    @foreach (var bt in Enum.GetValues<BloodType>())
+                    {
+                        <option value="@bt">@bt.ToString().Replace("Positive", "+").Replace("Negative", "-")</option>
+                    }
+                </select>
+            </div>
+        </div>
+    }
+    else if (CurrentStep == 4)
+    {
+        <div class="setup-step">
+            <h2>Connect Your Wearables</h2>
+            <p class="step-description">Connect your health devices to enhance your profile and matching.</p>
+            <div class="wearable-grid">
+                @foreach (var platform in Enum.GetValues<WearablePlatform>().Where(p => p != WearablePlatform.Other))
+                {
+                    <div class="wearable-card @(SelectedPlatforms.Contains(platform) ? "selected" : "")"
+                         @onclick="() => TogglePlatform(platform)">
+                        <span class="wearable-name">@FormatPlatformName(platform)</span>
+                        @if (SelectedPlatforms.Contains(platform))
+                        {
+                            <span class="check">✓</span>
+                        }
+                    </div>
+                }
+            </div>
+            <p class="wearable-note">You can connect devices later in your Health Dashboard.</p>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <div class="alert alert-danger">@ErrorMessage</div>
+    }
+
+    <div class="setup-actions">
+        @if (CurrentStep > 1)
+        {
+            <button type="button" class="btn btn-secondary" @onclick="PreviousStep">Back</button>
+        }
+        @if (CurrentStep < TotalSteps)
+        {
+            <button type="button" class="btn btn-primary" @onclick="NextStep">Continue</button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-primary" @onclick="CompleteSetup" disabled="@IsSaving">
+                @(IsSaving ? "Saving..." : "Complete Profile")
+            </button>
+        }
+    </div>
+</div>
+
+@code {
+    private int CurrentStep = 1;
+    private const int TotalSteps = 4;
+
+    private string? UserId { get; set; }
+
+    // Step 1
+    private string FirstName { get; set; } = string.Empty;
+    private string LastName { get; set; } = string.Empty;
+    private string DobString { get; set; } = DateTime.Today.AddYears(-21).ToString("yyyy-MM-dd");
+    private DateTime? DateOfBirth { get; set; } = DateTime.Today.AddYears(-21);
+    private string? DobError { get; set; }
+    private string MaxDobDate => DateTime.Today.AddYears(-21).ToString("yyyy-MM-dd");
+    private string MinDobDate => DateTime.Today.AddYears(-100).ToString("yyyy-MM-dd");
+
+    private void HandleDobChange(ChangeEventArgs e)
+    {
+        DobError = null;
+        var val = e.Value?.ToString();
+        if (DateTime.TryParse(val, out var parsed))
+        {
+            DateOfBirth = parsed;
+            DobString = parsed.ToString("yyyy-MM-dd");
+        }
+        else
+        {
+            DateOfBirth = null;
+            DobError = "Please enter a valid date.";
+        }
+    }
+    private string City { get; set; } = string.Empty;
+    private string State { get; set; } = string.Empty;
+    private string Location => string.Join(", ", new[] { City, State }
+        .Where(s => !string.IsNullOrWhiteSpace(s)));
+
+    private static readonly string[] UsStates =
+    [
+        "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
+        "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho",
+        "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
+        "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
+        "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada",
+        "New Hampshire", "New Jersey", "New Mexico", "New York",
+        "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon",
+        "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
+        "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington",
+        "West Virginia", "Wisconsin", "Wyoming"
+    ];
+
+    // Step 2
+    private string? Bio { get; set; }
+    private MatchingContext MatchingContext { get; set; } = MatchingContext.All;
+
+    // Step 3 - entered in imperial, stored in metric
+    private decimal? HeightFeet { get; set; }
+    private decimal? HeightInches { get; set; }
+    private decimal? WeightLbs { get; set; }
+    private decimal? HeightCm => HeightFeet.HasValue
+        ? Math.Round(((HeightFeet.Value * 12) + (HeightInches ?? 0)) * 2.54m, 1)
+        : null;
+    private decimal? WeightKg => WeightLbs.HasValue
+        ? Math.Round(WeightLbs.Value * 0.453592m, 1)
+        : null;
+    private BloodType SelectedBloodType { get; set; } = BloodType.Unknown;
+
+    // Step 4
+    private List<WearablePlatform> SelectedPlatforms { get; set; } = [];
+
+    private string? ErrorMessage { get; set; }
+    private bool IsSaving { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        UserId = authState.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (!string.IsNullOrEmpty(UserId))
+        {
+            var existing = await ProfileService.GetByUserIdAsync(UserId);
+            if (existing is not null)
+            {
+                FirstName = existing.FirstName;
+                LastName = existing.LastName;
+                DateOfBirth = existing.DateOfBirth;
+                DobString = existing.DateOfBirth.ToString("yyyy-MM-dd");
+                Bio = existing.Bio;
+                MatchingContext = existing.MatchingContext;
+                SelectedPlatforms = existing.ConnectedPlatforms.ToList();
+
+                // Parse location back into City/State
+                var parts = existing.Location?.Split(", ") ?? [];
+                if (parts.Length >= 1) City = parts[0];
+                if (parts.Length >= 2) State = parts[1];
+
+                // Convert metric back to imperial for display
+                if (existing.HeightCm.HasValue)
+                {
+                    var totalInches = existing.HeightCm.Value / 2.54m;
+                    HeightFeet = Math.Floor(totalInches / 12);
+                    HeightInches = Math.Round(totalInches % 12, 0);
+                }
+                if (existing.WeightCm.HasValue)
+                {
+                    WeightLbs = Math.Round(existing.WeightCm.Value / 0.453592m, 0);
+                }
+                if (existing.BloodType.HasValue)
+                {
+                    SelectedBloodType = existing.BloodType.Value;
+                }
+            }
+        }
+    }
+
+    private void SelectContext(MatchingContext context)
+    {
+        MatchingContext = context;
+        StateHasChanged();
+    }
+
+    private void NextStep()
+    {
+        ErrorMessage = null;
+
+        if (CurrentStep == 1)
+        {
+            if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName))
+            {
+                ErrorMessage = "Please enter your first and last name.";
+                return;
+            }
+            if (DateOfBirth == null)
+            {
+                ErrorMessage = "Please enter your date of birth.";
+                return;
+            }
+            if (DateOfBirth > DateTime.Today.AddYears(-21))
+            {
+                ErrorMessage = "You must be at least 21 years old to join Connecvita.";
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(City) || string.IsNullOrWhiteSpace(State))
+            {
+                ErrorMessage = "Please enter your city and select your state.";
+                return;
+            }
+        }
+
+        if (CurrentStep < TotalSteps)
+            CurrentStep++;
+    }
+
+    private void PreviousStep()
+    {
+        if (CurrentStep > 1)
+            CurrentStep--;
+    }
+
+    private void TogglePlatform(WearablePlatform platform)
+    {
+        if (SelectedPlatforms.Contains(platform))
+            SelectedPlatforms.Remove(platform);
+        else
+            SelectedPlatforms.Add(platform);
+    }
+
+    private static string FormatPlatformName(WearablePlatform platform) => platform switch
+    {
+        WearablePlatform.OuraRing => "Oura Ring",
+        WearablePlatform.AppleHealth => "Apple Health",
+        WearablePlatform.GoogleFit => "Google Fit",
+        WearablePlatform.SamsungHealth => "Samsung Health",
+        _ => platform.ToString()
+    };
+
+    private async Task CompleteSetup()
+    {
+        IsSaving = true;
+        ErrorMessage = null;
+
+        try
+        {
+            if (string.IsNullOrEmpty(UserId))
+            {
+                ErrorMessage = "Unable to identify user. Please log in again.";
+                return;
+            }
+
+            var createDto = new CreateProfileDto
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                DateOfBirth = DateOfBirth!.Value,
+                Bio = Bio,
+                Location = Location,
+                MatchingContext = MatchingContext
+            };
+
+            await ProfileService.CreateAsync(UserId, createDto);
+
+            var updateDto = new UpdateProfileDto
+            {
+                Bio = Bio,
+                Location = Location,
+                HeightCm = HeightCm,
+                WeightKg = WeightKg,
+                BloodType = SelectedBloodType
+            };
+
+            await ProfileService.UpdateAsync(UserId, updateDto);
+
+            Navigation.NavigateTo("/profile", forceLoad: true);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"An error occurred: {ex.Message}";
+        }
+        finally
+        {
+            IsSaving = false;
+        }
+    }
+}

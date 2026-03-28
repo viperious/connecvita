@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "Tg8z5LzGxzE=",
+  "success": true,
+  "projectFilePath": "C:\\Connecvita\\src\\Domain\\Connecvita.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\viper\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
