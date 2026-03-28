@@ -36,11 +36,16 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 var app = builder.Build();
 
 app.UseForwardedHeaders();
-app.Use((context, next) =>
+
+// Force HTTPS scheme in production behind reverse proxy
+if (!app.Environment.IsDevelopment())
 {
-    context.Request.Scheme = "https";
-    return next();
-});
+    app.Use((context, next) =>
+    {
+        context.Request.Scheme = "https";
+        return next();
+    });
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
