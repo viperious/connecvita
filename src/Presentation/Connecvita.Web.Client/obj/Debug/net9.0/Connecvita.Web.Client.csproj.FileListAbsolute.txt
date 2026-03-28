@@ -1035,10 +1035,10 @@ C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\refint\Con
 C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\Connecvita.Web.Client.pdb
 C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\ref\Connecvita.Web.Client.dll
 C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\Connecvita.Web.Client.sourcelink.json
-C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.kpffzqcz26.wasm
-C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.yya76h7m7u.pdb
-C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.kpffzqcz26.wasm.gz
-C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.yya76h7m7u.pdb.gz
-C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\compressed\4q20kxqb0f-kpffzqcz26.gz
-C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\compressed\ji8t7o7qy7-yya76h7m7u.gz
-C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\compressed\0mh73yr5rz-h5g9b2x3i6.gz
+C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.io1a78ahkn.wasm
+C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.24od4l7udd.pdb
+C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.io1a78ahkn.wasm.gz
+C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.24od4l7udd.pdb.gz
+C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\compressed\4q20kxqb0f-io1a78ahkn.gz
+C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\compressed\ji8t7o7qy7-24od4l7udd.gz
+C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\compressed\0mh73yr5rz-o2rti2ht7g.gz
