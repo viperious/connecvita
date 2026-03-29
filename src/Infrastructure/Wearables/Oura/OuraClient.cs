@@ -28,10 +28,10 @@ public class OuraClient : IWearableClient
 
     public string GetAuthorizationUrl(string userId, string redirectUri)
     {
-        var scopes = "email personal daily heartrate workout tag session spo2 stress cardiovascular_age";
+        var scopes = "email+personal+daily+heartrate+workout+tag+session+spo2+stress+cardiovascular_age";
         return $"{AuthUrl}?response_type=code&client_id={_clientId}" +
                $"&redirect_uri={Uri.EscapeDataString(redirectUri)}" +
-               $"&scope={Uri.EscapeDataString(scopes)}" +
+               $"&scope={scopes}" +
                $"&state={Uri.EscapeDataString(userId)}";
     }
 
@@ -104,82 +104,82 @@ public class OuraClient : IWearableClient
 
     public async Task<List<WearableMetrics>> FetchHistoricalMetricsAsync(
     WearableToken token, Guid userProfileId, DateTime from)
-{
-    var results = new List<WearableMetrics>();
-    var startDate = from.ToString("yyyy-MM-dd");
-    var endDate = DateTime.UtcNow.ToString("yyyy-MM-dd");
-
-    // Fetch all endpoints in parallel
-    var sleepTask = FetchAsync<OuraSleepData>(token,
-        $"/usercollection/daily_sleep?start_date={startDate}&end_date={endDate}");
-    var readinessTask = FetchAsync<OuraReadinessData>(token,
-        $"/usercollection/daily_readiness?start_date={startDate}&end_date={endDate}");
-    var activityTask = FetchAsync<OuraActivityData>(token,
-        $"/usercollection/daily_activity?start_date={startDate}&end_date={endDate}");
-    var sleepDetailTask = FetchAsync<OuraSleepDetailData>(token,
-        $"/usercollection/sleep?start_date={startDate}&end_date={endDate}");
-    var spO2Task = FetchAsync<OuraSpO2Data>(token,
-        $"/usercollection/daily_spo2?start_date={startDate}&end_date={endDate}");
-    var stressTask = FetchAsync<OuraStressData>(token,
-        $"/usercollection/daily_stress?start_date={startDate}&end_date={endDate}");
-
-    await Task.WhenAll(sleepTask, readinessTask, activityTask,
-        sleepDetailTask, spO2Task, stressTask);
-
-    var sleepData = await sleepTask;
-    var readinessData = await readinessTask;
-    var activityData = await activityTask;
-    var sleepDetailData = await sleepDetailTask;
-    var spO2Data = await spO2Task;
-    var stressData = await stressTask;
-
-    // Group by date and merge all data sources
-    var allDates = sleepData.Select(s => s.Day)
-        .Union(readinessData.Select(r => r.Day))
-        .Union(activityData.Select(a => a.Day))
-        .Distinct()
-        .OrderBy(d => d);
-
-    foreach (var date in allDates)
     {
-        var sleep = sleepData.FirstOrDefault(s => s.Day == date);
-        var readiness = readinessData.FirstOrDefault(r => r.Day == date);
-        var activity = activityData.FirstOrDefault(a => a.Day == date);
-        var sleepDetail = sleepDetailData.FirstOrDefault(s => s.Day == date);
-        var spO2 = spO2Data.FirstOrDefault(s => s.Day == date);
-        var stress = stressData.FirstOrDefault(s => s.Day == date);
+        var results = new List<WearableMetrics>();
+        var startDate = from.ToString("yyyy-MM-dd");
+        var endDate = DateTime.UtcNow.ToString("yyyy-MM-dd");
 
-        var metrics = WearableMetrics.Create(
-            userProfileId,
-            Platform,
-            DateTime.Parse(date)
-        );
+        // Fetch all endpoints in parallel
+        var sleepTask = FetchAsync<OuraSleepData>(token,
+            $"/usercollection/daily_sleep?start_date={startDate}&end_date={endDate}");
+        var readinessTask = FetchAsync<OuraReadinessData>(token,
+            $"/usercollection/daily_readiness?start_date={startDate}&end_date={endDate}");
+        var activityTask = FetchAsync<OuraActivityData>(token,
+            $"/usercollection/daily_activity?start_date={startDate}&end_date={endDate}");
+        var sleepDetailTask = FetchAsync<OuraSleepDetailData>(token,
+            $"/usercollection/sleep?start_date={startDate}&end_date={endDate}");
+        var spO2Task = FetchAsync<OuraSpO2Data>(token,
+            $"/usercollection/daily_spo2?start_date={startDate}&end_date={endDate}");
+        var stressTask = FetchAsync<OuraStressData>(token,
+            $"/usercollection/daily_stress?start_date={startDate}&end_date={endDate}");
 
-        metrics.UpdateMetrics(
-            sleepScore: sleep?.Score,
-            readinessScore: readiness?.Score,
-            activityScore: activity?.Score,
-            heartRate: sleepDetail?.AverageHeartRate,
-            hrv: sleepDetail?.AverageHrv,
-            temperature: readiness?.TemperatureDeviation,
-            workoutSummary: null,
-            tags: null,
-            sessionData: null,
-            spO2: spO2?.SpO2Percentage?.Average,
-            stressHigh: stress?.StressHigh,
-            recoveryHigh: stress?.RecoveryHigh,
-            stressSummary: stress?.DaySummary,
-            sleepEfficiency: sleepDetail?.Efficiency,
-            totalSleepMinutes: sleepDetail?.TotalSleepDuration.HasValue == true
-                ? sleepDetail.TotalSleepDuration / 60
-                : null
-        );
+        await Task.WhenAll(sleepTask, readinessTask, activityTask,
+            sleepDetailTask, spO2Task, stressTask);
 
-        results.Add(metrics);
+        var sleepData = await sleepTask;
+        var readinessData = await readinessTask;
+        var activityData = await activityTask;
+        var sleepDetailData = await sleepDetailTask;
+        var spO2Data = await spO2Task;
+        var stressData = await stressTask;
+
+        // Group by date and merge all data sources
+        var allDates = sleepData.Select(s => s.Day)
+            .Union(readinessData.Select(r => r.Day))
+            .Union(activityData.Select(a => a.Day))
+            .Distinct()
+            .OrderBy(d => d);
+
+        foreach (var date in allDates)
+        {
+            var sleep = sleepData.FirstOrDefault(s => s.Day == date);
+            var readiness = readinessData.FirstOrDefault(r => r.Day == date);
+            var activity = activityData.FirstOrDefault(a => a.Day == date);
+            var sleepDetail = sleepDetailData.FirstOrDefault(s => s.Day == date);
+            var spO2 = spO2Data.FirstOrDefault(s => s.Day == date);
+            var stress = stressData.FirstOrDefault(s => s.Day == date);
+
+            var metrics = WearableMetrics.Create(
+                userProfileId,
+                Platform,
+                DateTime.Parse(date)
+            );
+
+            metrics.UpdateMetrics(
+                sleepScore: sleep?.Score,
+                readinessScore: readiness?.Score,
+                activityScore: activity?.Score,
+                heartRate: sleepDetail?.AverageHeartRate,
+                hrv: sleepDetail?.AverageHrv,
+                temperature: readiness?.TemperatureDeviation,
+                workoutSummary: null,
+                tags: null,
+                sessionData: null,
+                spO2: spO2?.SpO2Percentage?.Average,
+                stressHigh: stress?.StressHigh,
+                recoveryHigh: stress?.RecoveryHigh,
+                stressSummary: stress?.DaySummary,
+                sleepEfficiency: sleepDetail?.Efficiency,
+                totalSleepMinutes: sleepDetail?.TotalSleepDuration.HasValue == true
+                    ? sleepDetail.TotalSleepDuration / 60
+                    : null
+            );
+
+            results.Add(metrics);
+        }
+
+        return results;
     }
-
-    return results;
-}
 
     private async Task<WearableMetrics> FetchMetricsForDateAsync(
         WearableToken token, Guid userProfileId, string date)
