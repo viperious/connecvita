@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Connecvita.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f4765b54f0293a6b7142bebfe009390f87828604")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1b22088337682776b7dd35f0187dc00dd782ab68")]
 [assembly: System.Reflection.AssemblyProductAttribute("Connecvita.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Connecvita.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1035,10 +1035,10 @@ C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\refint\Con
 C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\Connecvita.Web.Client.pdb
 C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\ref\Connecvita.Web.Client.dll
 C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\Connecvita.Web.Client.sourcelink.json
-C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.6mledyg253.wasm
-C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.b5kve7pxyy.pdb
-C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.6mledyg253.wasm.gz
-C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.b5kve7pxyy.pdb.gz
-C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\compressed\4q20kxqb0f-6mledyg253.gz
-C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\compressed\ji8t7o7qy7-b5kve7pxyy.gz
-C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\compressed\0mh73yr5rz-r0mcyypfqq.gz
+C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.y786t3o61g.wasm
+C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.lwaizexk3v.pdb
+C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.y786t3o61g.wasm.gz
+C:\Connecvita\src\Presentation\Connecvita.Web.Client\bin\Debug\net9.0\wwwroot\_framework\Connecvita.Web.Client.lwaizexk3v.pdb.gz
+C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\compressed\4q20kxqb0f-y786t3o61g.gz
+C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\compressed\ji8t7o7qy7-lwaizexk3v.gz
+C:\Connecvita\src\Presentation\Connecvita.Web.Client\obj\Debug\net9.0\compressed\0mh73yr5rz-fond2nqety.gz

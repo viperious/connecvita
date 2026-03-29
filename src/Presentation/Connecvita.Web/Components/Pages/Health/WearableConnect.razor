@@ -34,16 +34,16 @@
                         <button class="btn btn-sm btn-outline" @onclick="ResyncOura" disabled="@IsSyncing">
                             @(IsSyncing ? "Syncing..." : "🔄 Sync Now")
                         </button>
+                        @if (!string.IsNullOrEmpty(SyncMessage))
+                        {
+                            <p class="sync-message">@SyncMessage</p>
+                        }
                     }
                     else
                     {
-                        <button class="btn btn-primary" @onclick="ConnectOura">
+                        <a class="btn btn-primary" href="@OuraAuthUrl">
                             Connect Oura Ring
-                        </button>
-                        @if (!string.IsNullOrEmpty(DebugUrl))
-                        {
-                            <p style="word-break:break-all;font-size:0.7rem;">@DebugUrl</p>
-                        }
+                        </a>
                     }
                 </div>
             </div>
@@ -76,6 +76,8 @@
     private string? SyncMessage { get; set; }
 
     private string? DebugUrl { get; set; }
+
+    private string OuraAuthUrl { get; set; } = string.Empty;
 
     private async Task ResyncOura()
     {
@@ -112,8 +114,12 @@
             var profile = await ProfileService.GetByUserIdAsync(UserId);
             OuraConnected = profile?.ConnectedPlatforms
                 .Contains(WearablePlatform.OuraRing) ?? false;
+
+            // Pre-build the auth URL so it renders as a proper href
+            OuraAuthUrl = OuraAuthService.GetAuthorizationUrl(UserId);
         }
 
         IsLoading = false;
     }
+    
 }
