@@ -116,13 +116,4 @@
 
         IsLoading = false;
     }
-
-    private void ConnectOura()
-    {
-        if (string.IsNullOrEmpty(UserId)) return;
-        var authUrl = OuraAuthService.GetAuthorizationUrl(UserId);
-        DebugUrl = authUrl; // Show the URL before navigating
-        Navigation.NavigateTo(authUrl, forceLoad: true);
-    }
-
 }
