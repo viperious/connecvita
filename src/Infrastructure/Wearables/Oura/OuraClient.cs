@@ -28,7 +28,7 @@ public class OuraClient : IWearableClient
 
     public string GetAuthorizationUrl(string userId, string redirectUri)
     {
-        var scopes = "email+personal+daily+heartrate+workout+tag+session+spo2+stress+cardiovascular_age";
+        var scopes = "email+personal+daily+heartrate+workout+tag+session+spo2+stress+heart_health";
         return $"{AuthUrl}?response_type=code&client_id={_clientId}" +
                $"&redirect_uri={Uri.EscapeDataString(redirectUri)}" +
                $"&scope={scopes}" +
